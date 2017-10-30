@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+ext.android_support_version = '26.1.0'
+ext.arch_version = '1.0.0-alpha9-1'
+ext.retrofit_version = '2.3.0'
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.2"
@@ -21,6 +25,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -30,5 +38,24 @@ dependencies {
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+
+//    kotlin
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    // Architecture Components
+    compile "android.arch.lifecycle:runtime:$arch_version"
+    compile "android.arch.lifecycle:extensions:$arch_version"
+    compile "android.arch.persistence.room:runtime:$arch_version"
+    kapt "android.arch.lifecycle:compiler:$arch_version"
+    kapt "android.arch.persistence.room:compiler:$arch_version"
+
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:$retrofit_version"
+    compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    compile 'com.google.code.gson:gson:2.8.0'
+
+    // Support Libraries
+    compile "com.android.support:appcompat-v7:$android_support_version"
+    compile "com.android.support:recyclerview-v7:$android_support_version"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
