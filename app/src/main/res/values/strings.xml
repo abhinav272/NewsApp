@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">NewsApp</string>
     <string name="attribution">powered by NewsAPI.org</string>
+    <string-array name="news_categories">
+        <item>business</item>
+        <item>entertainment</item>
+        <item>gaming</item>
+        <item>general</item>
+        <item>music</item>
+        <item>politics</item>
+        <item>science-and-nature</item>
+        <item>sport</item>
+        <item>technology</item>
+    </string-array>
+    <string-array name="news_languages">
+        <item>en</item>
+        <item>de</item>
+        <item>fr</item>
+    </string-array>
 </resources>
