@@ -7,6 +7,9 @@ apply plugin: 'kotlin-android-extensions'
 ext.android_support_version = '26.1.0'
 ext.arch_version = '1.0.0-alpha9-1'
 ext.retrofit_version = '2.3.0'
+ext.rxjava_version = '2.1.2'
+ext.rxandroid_version = '2.0.1'
+ext.butterknife_version = '8.8.1'
 
 android {
     compileSdkVersion 26
@@ -42,12 +45,32 @@ dependencies {
 //    kotlin
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+    compile "com.android.support:cardview-v7:$android_support_version"
+    compile "com.android.support:design:$android_support_version"
+
     // Architecture Components
     compile "android.arch.lifecycle:runtime:$arch_version"
     compile "android.arch.lifecycle:extensions:$arch_version"
     compile "android.arch.persistence.room:runtime:$arch_version"
     kapt "android.arch.lifecycle:compiler:$arch_version"
     kapt "android.arch.persistence.room:compiler:$arch_version"
+    implementation "android.arch.lifecycle:runtime:$arch_version"
+    implementation "android.arch.lifecycle:extensions:$arch_version"
+    implementation "android.arch.lifecycle:common-java8:1.0.0-beta1"
+    implementation "android.arch.lifecycle:reactivestreams:$arch_version"
+    implementation "android.arch.persistence.room:runtime:$arch_version"
+    implementation "android.arch.persistence.room:rxjava2:$arch_version"
+    implementation "android.arch.paging:runtime:1.0.0-alpha2"
+    annotationProcessor "android.arch.persistence.room:compiler:$arch_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$arch_version"
+
+    // rxJava
+    compile "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    compile "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
+
+    // ButterKnife
+    compile "com.jakewharton:butterknife:$butterknife_version"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
 
     // Retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
