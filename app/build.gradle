@@ -16,7 +16,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.abhinav.newsapp"
-        minSdkVersion 26
+        minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -26,6 +26,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', 'API_KEY', newsAPIKey
+        }
+        debug {
+            buildConfigField 'String', 'API_KEY', newsAPIKey
         }
     }
     compileOptions {
@@ -67,10 +71,6 @@ dependencies {
     // rxJava
     compile "io.reactivex.rxjava2:rxjava:$rxjava_version"
     compile "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-
-    // ButterKnife
-    compile "com.jakewharton:butterknife:$butterknife_version"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
 
     // Retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
