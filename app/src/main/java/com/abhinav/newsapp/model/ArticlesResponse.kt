@@ -11,7 +11,7 @@ data class ArticlesResponse(
 		@SerializedName("status") val status: String?, //ok
 		@SerializedName("source") val source: String?, //abc-news-au
 		@SerializedName("sortBy") val sortBy: String?, //top
-		@SerializedName("articles") val articles: List<Article?>?
+		@SerializedName("articles") val articles: List<Article>?
 )
 
 data class Article(
