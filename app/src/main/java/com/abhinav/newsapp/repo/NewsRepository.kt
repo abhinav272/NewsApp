@@ -38,11 +38,13 @@ class NewsRepository(private val apiInterface: APIInterface) {
         val liveDataArticlesResponse: MutableLiveData<ArticlesResponse> = MutableLiveData()
         apiInterface.getArticles(source, sortBy, BuildConfig.API_KEY).enqueue(object : Callback<ArticlesResponse> {
             override fun onFailure(call: Call<ArticlesResponse>?, t: Throwable?) {
-
+                Log.e("Oops", "Network error ${t?.message}")
             }
 
-            override fun onResponse(call: Call<ArticlesResponse>?, response: Response<ArticlesResponse>?) {
-                liveDataArticlesResponse.value = response?.body()
+            override fun onResponse(call: Call<ArticlesResponse>, response: Response<ArticlesResponse>) {
+                Log.e("Article Call Status", response.body()?.status)
+                Log.e("Article Call List Contains", "${response.body()?.articles?.size}")
+                liveDataArticlesResponse.value = response.body()
             }
         })
         return liveDataArticlesResponse
