@@ -66,4 +66,14 @@ class NewsFragment : LifecycleFragment(), (Source) -> Unit {
         newsViewModel.getNewsArticles(source.id!!, source.sortBysAvailable?.get(0))
                 .observe(this, observerNewsArticle)
     }
+
+    fun onBackPressed() : Boolean{
+        return when{
+            recyclerView.adapter is NewsArticleAdapter -> {
+                recyclerView.adapter = newsSourceAdapter
+                true
+            }
+            else -> false
+        }
+    }
 }
