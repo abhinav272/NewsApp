@@ -10,11 +10,10 @@ import com.abhinav.newsapp.ui.NewsConstants
 
 @Entity(tableName = NewsConstants.T_ARTICLE)
 data class ArticleEntity(
-        @PrimaryKey(autoGenerate = true)
-        val id: Int,
+        @PrimaryKey
+        val title: String?,
         val source: String?,
         val author: String?,
-        val title: String?,
         val description: String?,
         val url: String?,
         val urlToImage: String?,
