@@ -7,17 +7,16 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class SourceResponse(
-        @SerializedName("status") val status: String?, //ok
-        @SerializedName("sources") val sources: List<Source>
+        @SerializedName("status") var status: String?, //ok
+        @SerializedName("sources") var sources: List<Source>
 )
 
 data class Source(
-        @SerializedName("id") val id: String?, //abc-news-au
-        @SerializedName("name") val name: String?, //ABC News (AU)
-        @SerializedName("description") val description: String?, //Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.
-        @SerializedName("url") val url: String?, //http://www.abc.net.au/news
-        @SerializedName("category") val category: String?, //general
-        @SerializedName("language") val language: String?, //en
-        @SerializedName("country") val country: String?, //au
-        @SerializedName("sortBysAvailable") val sortBysAvailable: List<String?>?
+        @SerializedName("id") var id: String?, //abc-news-au
+        @SerializedName("name") var name: String?, //ABC News (AU)
+        @SerializedName("description") var description: String?, //Australia's most trusted source of local, national and world news. Comprehensive, independent, in-depth analysis, the latest business, sport, weather and more.
+        @SerializedName("url") var url: String?, //http://www.abc.net.au/news
+        @SerializedName("category") var category: String?, //general
+        @SerializedName("language") var language: String?, //en
+        @SerializedName("country") var country: String? //au
 )
