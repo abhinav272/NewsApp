@@ -11,12 +11,11 @@ import com.abhinav.newsapp.ui.NewsConstants
 @Entity(tableName = NewsConstants.T_SOURCE)
 class SourceEntity(
         @PrimaryKey()
-        val id: String?,
-        val name: String?,
-        val description: String?,
-        val url: String?,
-        val category: String?,
-        val language: String?,
-        val country: String?,
-        val sortBysAvailable: List<String?>?
+        var id: String? = "",
+        var name: String? = "",
+        var description: String? = "",
+        var url: String? = "",
+        var category: String? = "",
+        var language: String? = "",
+        var country: String? = ""
 )
