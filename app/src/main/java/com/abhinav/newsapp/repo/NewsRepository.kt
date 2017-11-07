@@ -2,8 +2,16 @@ package com.abhinav.newsapp.ui.repo
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.content.Context
 import android.util.Log
 import com.abhinav.newsapp.BuildConfig
+import com.abhinav.newsapp.RateLimiter
+import com.abhinav.newsapp.api.ApiResponse
+import com.abhinav.newsapp.api.NetworkBoundResource
+import com.abhinav.newsapp.api.Resource
+import com.abhinav.newsapp.db.NewsDBHelper
+import com.abhinav.newsapp.db.SourceEntity
+import java.util.concurrent.TimeUnit
 import com.abhinav.newsapp.ui.api.APIInterface
 import com.abhinav.newsapp.ui.model.ArticlesResponse
 import com.abhinav.newsapp.ui.model.SourceResponse
@@ -16,22 +24,44 @@ import retrofit2.Response
  */
 class NewsRepository(private val apiInterface: APIInterface) {
 
-    fun getNewsSource(language: String?, category: String?, country: String?): LiveData<SourceResponse> {
-        val liveDataSourceResponse: MutableLiveData<SourceResponse> = MutableLiveData()
-        apiInterface.getSources(language, category, country).enqueue(object : Callback<SourceResponse> {
-            override fun onResponse(call: Call<SourceResponse>, response: Response<SourceResponse>) {
-                Log.e("Source Call Status : ", response.body()?.status)
-                Log.e("Source Call List contains : ", "${response.body()?.sources?.size}")
-                liveDataSourceResponse.value = response.body()
+    val repoRateLimiter = RateLimiter<String>(10, TimeUnit.MINUTES)
+
+    fun fetchNewsSource(context: Context, language: String?, category: String?, country: String?): LiveData<Resource<List<SourceEntity>>> {
+        return object : NetworkBoundResource<List<SourceEntity>, SourceResponse>() {
+            override fun onFetchFailed() {
+                repoRateLimiter.reset("all")
             }
 
-            override fun onFailure(call: Call<SourceResponse>?, t: Throwable?) {
-                Log.e("Oops", "Network error ${t?.message}")
+            override fun saveCallResult(item: SourceResponse) {
+                var sourceEntityArray = ArrayList<SourceEntity>(item.sources.size)
+                item.sources.forEach {
+                    var sourceEntity = SourceEntity()
+                    sourceEntity.id = it.id
+                    sourceEntity.category = it.category
+                    sourceEntity.country = it.country
+                    sourceEntity.description = it.description
+                    sourceEntity.language = it.language
+                    sourceEntity.name = it.name
+                    sourceEntity.url = it.url
+                    sourceEntityArray.add(sourceEntity)
+                }
+                NewsDBHelper.getInstance(context).getSourceDao().insertSources(*sourceEntityArray.toTypedArray())
             }
 
-        })
+            override fun shouldFetch(data: List<SourceEntity>?): Boolean = repoRateLimiter.shouldFetch("all")
 
-        return liveDataSourceResponse
+            override fun loadFromDb(): LiveData<List<SourceEntity>> {
+                //                Temporary type fuzz, make Api response and Db result-set in sync to avoid this
+                val sourceValue = NewsDBHelper.getInstance(context).getSourceDao().getAllNewsSource().value
+                val sourceResponseLiveData = MutableLiveData<List<SourceEntity>>()
+                sourceResponseLiveData.value = sourceValue
+                return sourceResponseLiveData
+            }
+
+            override fun createCall(): LiveData<ApiResponse<SourceResponse>> {
+                return apiInterface.getSources(language, category, country)
+            }
+        }.asLiveData()
     }
 
     fun getNewsArticles(source: String, sortBy: String?): LiveData<ArticlesResponse> {
