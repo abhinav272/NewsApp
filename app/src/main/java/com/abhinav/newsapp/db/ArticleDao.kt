@@ -9,7 +9,9 @@ import android.arch.persistence.room.*
 @Dao
 interface ArticleDao {
 
-    @Query("SELECT * FROM t_article WHERE source = :source")
+//    Using arg0 is way around, some issue with kotlin gradle plugin
+//    expecting fix in further releases
+    @Query("SELECT * FROM t_article WHERE source = :arg0")
     fun getArticlesBySource(source: String): LiveData<List<ArticleEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
