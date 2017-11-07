@@ -12,11 +12,16 @@ import com.abhinav.newsapp.ui.model.Source
 interface SourceDao {
 
     @Query("SELECT * FROM " + NewsConstants.T_SOURCE)
-    fun getAllNewsSource(): LiveData<List<Source>>
+    fun getAllNewsSource(): LiveData<List<SourceEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSources(vararg source: Source)
+    fun insertSources(vararg source: SourceEntity)
 
     @Delete
-    fun deleteSource(vararg source: Source)
+    fun deleteSource(vararg source: SourceEntity)
+
+//    fun insertSources(source: List<Source>) {
+//
+//        insertSources(*sourceEntityArray.toTypedArray())
+//    }
 }
