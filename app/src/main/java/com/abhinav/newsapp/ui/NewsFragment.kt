@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import com.abhinav.newsapp.R
 import com.abhinav.newsapp.adapter.NewsArticleAdapter
 import com.abhinav.newsapp.adapter.NewsSourceAdapter
+import com.abhinav.newsapp.api.Resource
+import com.abhinav.newsapp.db.SourceEntity
 import com.abhinav.newsapp.ui.model.ArticlesResponse
 import com.abhinav.newsapp.ui.model.Source
 import com.abhinav.newsapp.ui.model.SourceResponse
@@ -20,14 +22,14 @@ import kotlinx.android.synthetic.main.fragment_news.*
 /**
  * Created by abhinav.sharma on 01/11/17.
  */
-class NewsFragment : LifecycleFragment(), (Source) -> Unit {
+class NewsFragment : LifecycleFragment(), (SourceEntity) -> Unit {
 
     private lateinit var newsViewModel: NewsViewModel
-    private lateinit var observerNewsSource: Observer<SourceResponse>
+    private lateinit var observerNewsSource: Observer<Resource<List<SourceEntity>>>
     private lateinit var observerNewsArticle: Observer<ArticlesResponse>
     private lateinit var newsSourceAdapter: NewsSourceAdapter
     private lateinit var newsArticleAdapter: NewsArticleAdapter
-    private val sourceList  = ArrayList<Source>()
+    private val sourceList = ArrayList<SourceEntity>()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View? = inflater?.inflate(R.layout.fragment_news, container, false)
@@ -43,8 +45,8 @@ class NewsFragment : LifecycleFragment(), (Source) -> Unit {
 
         observerNewsSource = Observer { newsSource ->
             sourceList.clear()
-            if (newsSource?.sources != null) {
-                sourceList.addAll(newsSource.sources)
+            if (newsSource?.data != null) {
+                sourceList.addAll(newsSource.data)
                 newsSourceAdapter.notifyDataSetChanged()
             }
 
@@ -62,13 +64,13 @@ class NewsFragment : LifecycleFragment(), (Source) -> Unit {
                 .observe(this, observerNewsSource)
     }
 
-    override fun invoke(source: Source) {
-        newsViewModel.getNewsArticles(source.id!!, source.sortBysAvailable?.get(0))
+    override fun invoke(source: SourceEntity) {
+        newsViewModel.getNewsArticles(source.id!!, null)
                 .observe(this, observerNewsArticle)
     }
 
-    fun onBackPressed() : Boolean{
-        return when{
+    fun onBackPressed(): Boolean {
+        return when {
             recyclerView.adapter is NewsArticleAdapter -> {
                 recyclerView.adapter = newsSourceAdapter
                 true
