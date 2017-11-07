@@ -9,7 +9,7 @@ import com.abhinav.newsapp.ui.NewsConstants
 /**
  * Created by abhinav.sharma on 04/11/17.
  */
-@Database(entities = arrayOf(SourceDao::class, ArticleDao::class), version = 1)
+@Database(entities = arrayOf(SourceEntity::class, ArticleEntity::class), version = 1)
 abstract class NewsDBHelper : RoomDatabase() {
     abstract fun getArticleDao(): ArticleDao
     abstract fun getSourceDao(): SourceDao
