@@ -3,6 +3,7 @@ package com.abhinav.newsapp.ui.repo
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import android.support.annotation.WorkerThread
 import android.util.Log
 import com.abhinav.newsapp.BuildConfig
 import com.abhinav.newsapp.RateLimiter
@@ -15,9 +16,13 @@ import java.util.concurrent.TimeUnit
 import com.abhinav.newsapp.ui.api.APIInterface
 import com.abhinav.newsapp.ui.model.ArticlesResponse
 import com.abhinav.newsapp.ui.model.SourceResponse
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+
 
 /**
  * Created by abhinav.sharma on 31/10/17.
@@ -33,7 +38,6 @@ class NewsRepository(private val apiInterface: APIInterface) {
             }
 
             override fun saveCallResult(item: SourceResponse) {
-                var sourceEntityArray = ArrayList<SourceEntity>(item.sources.size)
                 item.sources.forEach {
                     var sourceEntity = SourceEntity()
                     sourceEntity.id = it.id
@@ -43,19 +47,19 @@ class NewsRepository(private val apiInterface: APIInterface) {
                     sourceEntity.language = it.language
                     sourceEntity.name = it.name
                     sourceEntity.url = it.url
-                    sourceEntityArray.add(sourceEntity)
+                    NewsDBHelper.getInstance(context).getSourceDao().insertSources(sourceEntity)
                 }
-                NewsDBHelper.getInstance(context).getSourceDao().insertSources(*sourceEntityArray.toTypedArray())
+
             }
 
             override fun shouldFetch(data: List<SourceEntity>?): Boolean = repoRateLimiter.shouldFetch("all")
 
             override fun loadFromDb(): LiveData<List<SourceEntity>> {
                 //                Temporary type fuzz, make Api response and Db result-set in sync to avoid this
-                val sourceValue = NewsDBHelper.getInstance(context).getSourceDao().getAllNewsSource().value
-                val sourceResponseLiveData = MutableLiveData<List<SourceEntity>>()
-                sourceResponseLiveData.value = sourceValue
-                return sourceResponseLiveData
+                return NewsDBHelper.getInstance(context).getSourceDao().getAllNewsSource()
+//                val sourceResponseLiveData = MutableLiveData<List<SourceEntity>>()
+//                sourceResponseLiveData.value = sourceValue
+//                return sourceResponseLiveData
             }
 
             override fun createCall(): LiveData<ApiResponse<SourceResponse>> {
