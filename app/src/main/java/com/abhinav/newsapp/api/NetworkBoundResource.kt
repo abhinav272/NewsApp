@@ -4,6 +4,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.support.annotation.MainThread
 import android.support.annotation.WorkerThread
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
+import retrofit2.Call
 
 /**
  * Created by abhinav.sharma on 06/11/17.
@@ -35,7 +39,11 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
             result.removeSource(dbSource)
 
             if (response!!.isSuccessful) {
-                processResponse(response).let { saveCallResult(it!!) }
+                processResponse(response).let {
+                    Observable.fromCallable { saveCallResult(it!!) }
+                            .subscribeOn(Schedulers.io())
+                            .subscribe()
+                }
                 // we specially request a new live data,
                 // otherwise we will get immediately last cached value,
                 // which may not be updated with latest results received from network.
