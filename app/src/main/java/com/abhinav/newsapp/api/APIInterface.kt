@@ -2,6 +2,7 @@ package com.abhinav.newsapp.ui.api
 
 import android.arch.lifecycle.LiveData
 import com.abhinav.newsapp.api.ApiResponse
+import com.abhinav.newsapp.api.LiveDataCallAdapterFactory
 import com.abhinav.newsapp.ui.model.ArticlesResponse
 import com.abhinav.newsapp.ui.model.SourceResponse
 import retrofit2.Call
@@ -24,7 +25,7 @@ interface APIInterface {
             return Retrofit.Builder()
                     .baseUrl(NEWSAPI_URL)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addCallAdapterFactory(LiveDataCallAdapterFactory())
                     .build()
                     .create(APIInterface::class.java)
         }
