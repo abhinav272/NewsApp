@@ -15,7 +15,7 @@ interface SourceDao {
     fun getAllNewsSource(): LiveData<List<SourceEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertSources(vararg source: SourceEntity)
+    fun insertSources(source: List<SourceEntity>)
 
     @Delete
     fun deleteSource(vararg source: SourceEntity)
