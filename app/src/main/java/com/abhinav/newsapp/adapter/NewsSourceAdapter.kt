@@ -11,7 +11,7 @@ import com.abhinav.newsapp.ui.model.Source
 /**
  * Created by abhinav.sharma on 01/11/17.
  */
-class NewsSourceAdapter(private val listener: (SourceEntity) -> Unit, private val sourceList: List<SourceEntity>) : RecyclerView.Adapter<NewsSourceViewHolder>() {
+class NewsSourceAdapter(private val listener: (SourceEntity) -> Unit, private var sourceList: List<SourceEntity>) : RecyclerView.Adapter<NewsSourceViewHolder>() {
 
 
     override fun getItemCount(): Int {
@@ -27,4 +27,9 @@ class NewsSourceAdapter(private val listener: (SourceEntity) -> Unit, private va
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsSourceViewHolder =
             NewsSourceViewHolder(parent.inflate(R.layout.layout_news_source_single))
+
+    fun updateDataSet(data: List<SourceEntity>){
+        sourceList = data
+        notifyDataSetChanged()
+    }
 }
