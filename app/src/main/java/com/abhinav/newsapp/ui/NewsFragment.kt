@@ -44,10 +44,8 @@ class NewsFragment : LifecycleFragment(), (SourceEntity) -> Unit {
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         observerNewsSource = Observer { newsSource ->
-            sourceList.clear()
             if (newsSource?.data != null) {
-                sourceList.addAll(newsSource.data)
-                newsSourceAdapter.notifyDataSetChanged()
+                newsSourceAdapter.updateDataSet(newsSource.data)
             }
 
         }
