@@ -47,8 +47,7 @@ abstract class NetworkBoundResource<ResultType, RequestType> @MainThread constru
                 // we specially request a new live data,
                 // otherwise we will get immediately last cached value,
                 // which may not be updated with latest results received from network.
-                result.addSource(loadFromDb()
-                ) { resultType -> result.value = Resource.success(resultType) }
+                result.addSource(loadFromDb()) { resultType -> result.value = Resource.success(resultType) }
 
             } else {
                 onFetchFailed()
