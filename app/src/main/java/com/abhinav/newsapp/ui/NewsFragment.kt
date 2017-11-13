@@ -1,5 +1,6 @@
 package com.abhinav.newsapp.ui
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -30,10 +31,13 @@ class NewsFragment : LifecycleFragment(), (SourceEntity) -> Unit {
     private lateinit var newsSourceAdapter: NewsSourceAdapter
     private lateinit var newsArticleAdapter: NewsArticleAdapter
     private val sourceList = ArrayList<SourceEntity>()
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View? = inflater?.inflate(R.layout.fragment_news, container, false)
         newsViewModel = ViewModelProviders.of(this).get(NewsViewModel::class.java)
+        progressDialog = ProgressDialog.show(activity, "News API", "Loading News Source from Web-Service")
+        progressDialog.show()
         return view
     }
 
@@ -44,7 +48,8 @@ class NewsFragment : LifecycleFragment(), (SourceEntity) -> Unit {
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
         observerNewsSource = Observer { newsSource ->
-            if (newsSource?.data != null) {
+            if (newsSource?.data != null && newsSource.data.isNotEmpty()) {
+                progressDialog.dismiss()
                 newsSourceAdapter.updateDataSet(newsSource.data)
             }
 
