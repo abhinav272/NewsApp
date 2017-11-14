@@ -18,7 +18,7 @@ interface SourceDao {
     fun insertSources(source: List<SourceEntity>)
 
     @Delete
-    fun deleteSource(vararg source: SourceEntity)
+    fun deleteSource(source: List<SourceEntity>)
 
 //    fun insertSources(source: List<Source>) {
 //
