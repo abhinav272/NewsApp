@@ -45,8 +45,9 @@ The app uses `ViewModel` to abstract the data from UI and `Repository` as single
 --------------------
 
 ## Future Roadmap
+- ~~Room Persistence Library for offline support~~
 - Support for Launguage, Country and Category selection
-- Write test cases
+- ~~Write test cases~~
 
 <p align="center">
   <h3>Proudly :muscle: made in <b><a href="https://kotlinlang.org/">Kotlin</a></b></h3>
