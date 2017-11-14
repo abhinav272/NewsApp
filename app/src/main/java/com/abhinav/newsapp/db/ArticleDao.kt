@@ -15,9 +15,9 @@ interface ArticleDao {
     fun getArticlesBySource(source: String): LiveData<List<ArticleEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addArticle(vararg articles: ArticleEntity)
+    fun addArticle(articleList: List<ArticleEntity>)
 
     @Delete
-    fun deleteArticle(vararg article: ArticleEntity)
+    fun deleteArticle(articleList: List<ArticleEntity>)
 
 }
