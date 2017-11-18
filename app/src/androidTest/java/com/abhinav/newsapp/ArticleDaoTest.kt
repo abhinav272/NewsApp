@@ -62,6 +62,7 @@ class ArticleDaoTest {
     fun testInsertAndRetrieve(){
         newsDBHelper.getArticleDao().addArticle(getArticleDummyList())
         assertTrue(getArticleDummyList().containsAll(getValue(newsDBHelper.getArticleDao().getArticlesBySource("googlenews"))))
+        assertTrue(getGoogleArticleList().equals(getValue(newsDBHelper.getArticleDao().getArticlesBySource("googlenews"))))
         assertFalse(getValue(newsDBHelper.getArticleDao().getArticlesBySource("bbcnews")).equals(getArticleDummyList()))
     }
 
